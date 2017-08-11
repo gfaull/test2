@@ -1,0 +1,3541 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Modulo API",
+    "version": "1",
+    "title": "Modulr API",
+    "contact": {
+      "name": "it.support@modulrfinance.com"
+    },
+    "license": {
+      "name": "© Modulr Finance"
+    }
+  },
+  "host": "api-sandbox.modulrfinance.com",
+  "basePath": "/api-sandbox-token",
+  "tags": [
+    {
+      "name": "Accounts",
+      "description": "Operations on Accounts"
+    },
+    {
+      "name": "Payments",
+      "description": "Operations for Payments"
+    },
+    {
+      "name": "Inbound payments",
+      "description": "Inbound payment operations"
+    },
+    {
+      "name": "Customers",
+      "description": "Operations on Customers"
+    },
+    {
+      "name": "Transactions",
+      "description": "Operations on Transactions"
+    },
+    {
+      "name": "Beneficiaries",
+      "description": "Operations on Beneficiaries"
+    },
+    {
+      "name": "Notifications",
+      "description": "Operations on Notifications"
+    },
+    {
+      "name": "Rules",
+      "description": "Operations on Rules"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "security": [
+    {
+      "modulo_security": []
+    }
+  ],
+  "paths": {
+    "/accounts/{id}": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "summary": "Get an Account",
+        "description": "Retrieve details of a particular account using its ID as a reference",
+        "operationId": "getAccountUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of Account to fetch",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Account"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Accounts"
+        ],
+        "summary": "Edit an Account",
+        "description": "Edit details of a particular account using its ID as a reference",
+        "operationId": "Edit Account",
+        "consumes": [
+          "application/json;charset=UTF-8"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of Account to be edited",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "external reference",
+            "description": "New external reference for account",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/UpdateAccountRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Account"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Validation errors"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/customers/{cid}/notifications": {
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Get all Notifications for a Customer",
+        "description": "Retrieve details of all notifications set up for a customer using the customer's ID as a reference",
+        "operationId": "getAllCustomerNotificationsUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "path",
+            "description": "cid",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/NotificationResponse"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Set up a Notification for a Customer",
+        "description": "Sets up a new notification for a customer using the customer's ID as a reference. Returns a notification ID that should be saved if the notification needs to be amended in the future",
+        "operationId": "addCustomerNotificationUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "path",
+            "description": "cid",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "notificationRequest",
+            "description": "notificationRequest",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NotificationRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/NotificationResponse"
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/credit": {
+      "post": {
+        "tags": [
+          "Inbound payments"
+        ],
+        "summary": "Inbound payments - mock (Sandbox only)",
+        "description": "Endpoint to mock the credit of an account",
+        "operationId": "Create PaymentUsingPOST",
+        "consumes": [
+          "application/json;charset=UTF-8"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "creditRequest",
+            "description": "Details of credit to the account",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/InboundPaymentRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/webhooks/{id}/failures": {
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Check if a particular webhook has failed",
+        "description": "For some reason we decided to keep our old format for this endpoint and instead of using 'notifications' you need to use 'webhooks', request a specific webhook ID and specify you want to see failures. (Max 50)",
+        "operationId": "getFailedWebHooksUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of Webhook ",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "description": "Failed since Date. Needs to be urlEncoded value",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/WebHookFailureResponse"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/beneficiaries": {
+      "get": {
+        "tags": [
+          "Beneficiaries"
+        ],
+        "summary": "Retrieve Beneficiaries",
+        "description": "The ability to get the details of beneficiaries using various pieces of information, e.g. using Customer ID, retrieve all beneficiaries created by that customer. Can get details of one particular beneficiary based on the unique beneficiary reference number.",
+        "operationId": "getBeneficiariesUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Id of Beneficiary(s) to fetch",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "customerId",
+            "in": "query",
+            "description": "Filter by Customer Id",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page to fetch (0 indexed)",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "format": "int32"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Size of Page to fetch",
+            "required": false,
+            "type": "integer",
+            "default": 20,
+            "format": "int32"
+          },
+          {
+            "name": "createdDate",
+            "in": "query",
+            "description": "Created date",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "partialName",
+            "in": "query",
+            "description": "Partial name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sortCode",
+            "in": "query",
+            "description": "Sort code",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "accountNumber",
+            "in": "query",
+            "description": "Account number",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PageResponse«Beneficiary»"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/payments": {
+      "get": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Retrieve Payments",
+        "description": "The ability to get the details of payments using various pieces of information, e.g. using Account ID, retrieve all payments in that account. Can get details of one particular payment based on the unique payment reference number.",
+        "operationId": "getPaymentsUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Payment id. If specified then all other parameters are ignored",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "fromCreatedDate",
+            "in": "query",
+            "description": "Payments created date equal or after to this date. Mandatory Parameter(except when 'id' parameter is used)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "toCreatedDate",
+            "in": "query",
+            "description": "Payments created date equal or before to this date",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sourceAccountId",
+            "in": "query",
+            "description": "sourceAccountId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "externalReference",
+            "in": "query",
+            "description": "externalReference",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Payment status, multiple statuses can be specified by repeating the parameter",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page to fetch (0 indexed)",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "format": "int32"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Size of Page to fetch",
+            "required": false,
+            "type": "integer",
+            "default": 20,
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PageResponse«PaymentResponse»"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Create a Payment",
+        "description": "Supports both Payments to external bank accounts via Faster Payments and transfers to other Modulr accounts. Requests to Payments are asynchronous.",
+        "operationId": "sendPaymentUsingPOST",
+        "consumes": [
+          "application/json;charset=UTF-8"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "paymentRequest",
+            "description": "Details of Payment request",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/PaymentOutRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "PaymentReference",
+            "schema": {
+              "$ref": "#/definitions/PaymentResponse"
+            }
+          },
+          "400": {
+            "description": "Validation errors"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/accounts/{aid}/rules": {
+      "get": {
+        "tags": [
+          "Rules"
+        ],
+        "summary": "Get all Rules for a specific Account",
+        "description": "The ability to get the details of all rules associated with the specified account using the Account ID as a reference. Can filter by a specific type using the type parameter.",
+        "operationId": "getRulesUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "aid",
+            "in": "path",
+            "description": "Id of Account to get Rules of",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page to fetch (0 indexed)",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "format": "int32"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Size of Page to fetch",
+            "required": false,
+            "type": "integer",
+            "default": 20,
+            "format": "int32"
+          },
+          {
+            "name": "rtype",
+            "in": "query",
+            "description": "Filter to a specific RuleType",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PageResponse«RuleResponse»"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/customers": {
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Retrieve Customers using filters",
+        "description": "Either using unique references, such as Customer ID, or filter parameters, such as verification status, get details of any Customers found.",
+        "operationId": "getCustomersUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Id of Customer(s) to fetch",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Id or name or external reference of customer to search for",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Type to filter",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "verificationStatus",
+            "in": "query",
+            "description": "Verification Status to filter",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "fromCreatedDate",
+            "in": "query",
+            "description": "Customers created after and on this date",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "toCreatedDate",
+            "in": "query",
+            "description": "Customers created before and on this date",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page to fetch (0 indexed)",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "format": "int32"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Size of Page to fetch",
+            "required": false,
+            "type": "integer",
+            "default": 20,
+            "format": "int32"
+          },
+          {
+            "name": "sortField",
+            "in": "query",
+            "description": "Sort by field",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "description": "Sorting order",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PageResponse«Customer»"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Create a new Customer",
+        "description": "This endpoint allows you to create a new customer. The Customer object is quite large as a lot of information is needed to create one, including any people assosiated with the Customer such as directors (this changes depending on the type of legal entity the company is). Although the object is named 'Company' an individual can also be created.",
+        "operationId": "Create Customer",
+        "consumes": [
+          "application/json;charset=UTF-8"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "customerRequest",
+            "description": "Details of Customer to create",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/CreateCustomerRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/Customer"
+            }
+          },
+          "400": {
+            "description": "Validation errors"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/rules/{rid}": {
+      "put": {
+        "tags": [
+          "Rules"
+        ],
+        "summary": "Edit a specific Rule",
+        "description": "The ability to modify the details of a specific rule based on the rule's unique reference.",
+        "operationId": "modifyRuleUsingPUT",
+        "consumes": [
+          "application/json;charset=UTF-8"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "rid",
+            "in": "path",
+            "description": "Id of Rule to be edited",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "editRuleRequest",
+            "description": "edit rule request",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/CreateRuleRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/RuleResponse"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Validation errors"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/customers/{cid}/accounts": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "summary": "Get Accounts by Customer",
+        "description": "Get details of accounts belonging to a particular customer using the customer’s ID as a reference",
+        "operationId": "getAccountsByCustomerUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "path",
+            "description": "Id of Customer to fetch Accounts for",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "minBalance",
+            "in": "query",
+            "description": "Accounts with balance equal or more than this amount",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "maxBalance",
+            "in": "query",
+            "description": "Accounts with balance equal or less than this amount",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "fromCreatedDate",
+            "in": "query",
+            "description": "Accounts created after and on this date",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "toCreatedDate",
+            "in": "query",
+            "description": "Accounts created before and on this date",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page to fetch (0 indexed)",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "format": "int32"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Size of Page to fetch",
+            "required": false,
+            "type": "integer",
+            "default": 20,
+            "format": "int32"
+          },
+          {
+            "name": "sortField",
+            "in": "query",
+            "description": "Sort by field",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "description": "Sorting order",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PageResponse«Account»"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Accounts"
+        ],
+        "summary": "Create Account by Customer",
+        "description": "Creates an account for a particular customer using the customer’s ID as a reference",
+        "operationId": "Create Account",
+        "consumes": [
+          "application/json;charset=UTF-8"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "path",
+            "description": "Id of Customer to create account for",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "account",
+            "description": "Details of Account to create",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/CreateAccountRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/Account"
+            }
+          },
+          "400": {
+            "description": "Validation errors"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/customers/{cid}": {
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Retrieve a specific Customer using a unique Customer reference",
+        "description": "Either using unique references, such as Customer ID, or filter parameters, such as verification status, get details of any Customers found.",
+        "operationId": "getCustomerUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "path",
+            "description": "cid",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Customer"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Edit a specific Customer using a unique Customer reference",
+        "description": "Using the unique references (Customer ID), you are able to change the alias of the Customer.",
+        "operationId": "editCustomerUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "path",
+            "description": "Id of Customer to be edited",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "customerDetails",
+            "description": "Details of Customer to edit",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/UpdateCustomerRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Customer"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/batchpayments/{id}": {
+      "get": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Retrieve details of a Batch Payment",
+        "description": "As well as supporting individual payment requests, the Modulr payment platform can also handle multiple payment objects in the same request. This endpoint is to get the details of a batch payment that has already been created, via the unique reference that was in the response to the original batch payment request.",
+        "operationId": "get batch details",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id given when batch request was made",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/BatchPaymentResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/customers/{cid}/beneficiaries": {
+      "post": {
+        "tags": [
+          "Beneficiaries"
+        ],
+        "summary": "Create a new Beneficiary for a specified Customer",
+        "description": "The ability to create a new beneficiary for a Customer, using their Customer ID as a reference.",
+        "operationId": "Create Beneficiary",
+        "consumes": [
+          "application/json;charset=UTF-8"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "path",
+            "description": "Id of Customer to create Beneficiary for",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "createBeneficiaryRequest",
+            "description": "createBeneficiaryRequest",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateBeneficiaryRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/Beneficiary"
+            }
+          },
+          "400": {
+            "description": "Validation errors"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Beneficiaries"
+        ],
+        "summary": "Delete Beneficiaries for a specified Customer",
+        "description": "Deleting beneficiaries for a Customer, using their customer ID",
+        "operationId": "Delete Beneficiaries",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "path",
+            "description": "Id of Customer to delete Beneficiaries for",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "bid",
+            "in": "query",
+            "description": "Id(s) of Beneficiaries to delete, must owned by customer and active",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted single resource",
+            "schema": {
+              "$ref": "#/definitions/MessageResponse"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "207": {
+            "description": "Map of multiple responses for multi-request",
+            "schema": {
+              "$ref": "#/definitions/MessageResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/batchpayments": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Make a Batch Payment",
+        "description": "As well as supporting individual payment requests, the Modulr payment platform can also handle multiple payment objects in the same request. This endpoint allows you to make a new batch payment.",
+        "operationId": "submitBatchPaymentsUsingPOST",
+        "consumes": [
+          "application/json;charset=UTF-8"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "batchPaymentRequest",
+            "description": "Details of Batch request",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/BatchPaymentOutRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "BatchPaymentReference",
+            "schema": {
+              "$ref": "#/definitions/BatchPaymentResponse"
+            }
+          },
+          "400": {
+            "description": "Validation errors"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/accounts/{id}/close": {
+      "post": {
+        "tags": [
+          "Accounts"
+        ],
+        "summary": "Close an Account",
+        "description": "When you no longer want or need an account you are able to close using the Account ID as a unique reference",
+        "operationId": "closeAccountUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of Account to close",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/rules": {
+      "post": {
+        "tags": [
+          "Rules"
+        ],
+        "summary": "Create a Rule",
+        "description": "When you want a new rule on an account you can create one with this endpoint. Note that Rules are linked to an Account and each Account can only have one instance of a Rule type",
+        "operationId": "createRuleUsingPOST",
+        "consumes": [
+          "application/json;charset=UTF-8"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "createRuleRequest",
+            "description": "create rule request",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/CreateRuleRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/RuleResponse"
+            }
+          },
+          "400": {
+            "description": "Validation errors"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Rules"
+        ],
+        "summary": "Delete a Rule",
+        "description": "When you no longer want a rule on an account you can do it with this endpoint. You can delete more than one rule in the same request.",
+        "operationId": "removeRulesUsingDELETE",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "rIds",
+            "in": "query",
+            "description": "Id(s) of Rules to delete",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted single resource",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "207": {
+            "description": "Map of multiple responses for multi-request",
+            "schema": {
+              "$ref": "#/definitions/MessageResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/customers/{cid}/notifications/{id}": {
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Retrieve a specific notification by unique reference for a specific customer",
+        "description": "This allows you to see the settings for a particular notification that has been set up, for example if you want to check if it is active or the emails the notification is being sent to. It would be best practice to call this before updating a notification.",
+        "operationId": "getCustomerNotificationUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "path",
+            "description": "cid",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/NotificationResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Update a specific notification by unique reference for a specific customer",
+        "description": "If you need to change anything about a particular notification, for example add an email address or make it inactive, then this is the endpoint to use. You need to put all of the information into this request for the notification even if it isn't changing, so either you will need to record this somewhere when you create the notification, or call the 'GET' request first.",
+        "operationId": "editCustomerNotificationUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "path",
+            "description": "cid",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "updateNotificationRequest",
+            "description": "updateNotificationRequest",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateNotificationRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/NotificationResponse"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/accounts": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "summary": "Get accounts using filters",
+        "description": "Gives the ability to find accounts and get their details using filters",
+        "operationId": "Get Accounts",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Id of Account(s) to fetch",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Id or Name of Account to search for",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "minBalance",
+            "in": "query",
+            "description": "Accounts with balance equal or more than this amount",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "maxBalance",
+            "in": "query",
+            "description": "Accounts with balance equal or less than this amount",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "fromCreatedDate",
+            "in": "query",
+            "description": "Accounts created after and on this date",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "toCreatedDate",
+            "in": "query",
+            "description": "Accounts created before and on this date",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page to fetch (0 indexed)",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "format": "int32"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Size of Page to fetch",
+            "required": false,
+            "type": "integer",
+            "default": 20,
+            "format": "int32"
+          },
+          {
+            "name": "sortField",
+            "in": "query",
+            "description": "Sort by field",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "description": "Sorting order",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PageResponse«Account»"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/accounts/{aid}/rules/{rtype}": {
+      "get": {
+        "tags": [
+          "Rules"
+        ],
+        "summary": "Retrieve a Rule by rule type on a specific account",
+        "description": "You need to know the unique reference of the account and the rule type you want to get to information on",
+        "operationId": "getRuleUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "aid",
+            "in": "path",
+            "description": "Id of Account to get Rule of",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "rtype",
+            "in": "path",
+            "description": "rtype",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/RuleResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/accounts/{id}/transactions": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Get Transactions for a specific Account",
+        "description": "Retrieves the last 6 months of transactions (successful payments in & out) of an account, specified by a unique account reference.",
+        "operationId": "Get Transactions",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of Account to fetch Transactions for",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page to fetch (0 indexed)",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "format": "int32"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Size of Page to fetch",
+            "required": false,
+            "type": "integer",
+            "default": 20,
+            "format": "int32"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Partial description text to search for",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "minAmount",
+            "in": "query",
+            "description": "Transactions with amount equal or more than this amount",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "maxAmount",
+            "in": "query",
+            "description": "Transactions with amount equal or less than this amount",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "fromTransactionDate",
+            "in": "query",
+            "description": "Transactions with transaction date equal or after to this date",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "toTransactionDate",
+            "in": "query",
+            "description": "Transactions with transaction date equal or before to this date",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "fromPostedDate",
+            "in": "query",
+            "description": "Transactions with posted date equal or after to this date",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "toPostedDate",
+            "in": "query",
+            "description": "Transactions with posted date equal or before to this date",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Transactions of this type, multiple types can be specified by repeating the parameter",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "credit",
+            "in": "query",
+            "description": "If true only credit transactions will be returned, if false, only debit transactions will be returned",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "sourceId",
+            "in": "query",
+            "description": "Transactions with this sourceId",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TransactionPageResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "modulo_security": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "Account": {
+      "type": "object",
+      "required": [
+        "balance",
+        "createdDate",
+        "currency",
+        "customerId",
+        "id",
+        "identifiers",
+        "name",
+        "status"
+      ],
+      "properties": {
+        "balance": {
+          "type": "string",
+          "description": "Balance of the account in format 'NN.NN'"
+        },
+        "createdDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Datetime when the account was created"
+        },
+        "currency": {
+          "type": "string",
+          "description": "Currency of the account in ISO 4217 format"
+        },
+        "customerId": {
+          "type": "string",
+          "description": "Unique id of the Customer"
+        },
+        "customerName": {
+          "type": "string",
+          "description": "Customer Name"
+        },
+        "externalReference": {
+          "type": "string",
+          "description": "Your reference for an account"
+        },
+        "id": {
+          "type": "string",
+          "description": "Unique id for the account"
+        },
+        "identifiers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Account Identifier"
+          }
+        },
+        "name": {
+          "type": "string",
+          "description": "Name for the account"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the account. Accounts must be 'ACTIVE' to make and receive payments. Can be one of ",
+          "enum": [
+            "ACTIVE",
+            "INACTIVE",
+            "BLOCKED",
+            "CLOSED"
+          ]
+        }
+      }
+    },
+    "UpdateAccountRequest": {
+      "type": "object",
+      "properties": {
+        "externalReference": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 50,
+          "pattern": "[\\w-\\s]*"
+        }
+      }
+    },
+    "CreateBeneficiaryRequest": {
+      "type": "object",
+      "required": [
+        "defaultReference",
+        "destinationIdentifier",
+        "name"
+      ],
+      "properties": {
+        "defaultReference": {
+          "type": "string"
+        },
+        "destinationIdentifier": {
+          "$ref": "#/definitions/IdentifierRequest"
+        },
+        "externalReference": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 50,
+          "pattern": "[\\w-\\s]*"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 100,
+          "pattern": "^([^A-Za-z0-9]*?[A-Za-z0-9]){1,}['\\.\\-\\/&\\s]*"
+        }
+      }
+    },
+    "Address": {
+      "type": "object",
+      "required": [
+        "addressLine1",
+        "country",
+        "id",
+        "postCode",
+        "postTown"
+      ],
+      "properties": {
+        "addressLine1": {
+          "type": "string"
+        },
+        "addressLine2": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "postCode": {
+          "type": "string"
+        },
+        "postTown": {
+          "type": "string"
+        }
+      }
+    },
+    "Customer": {
+      "type": "object",
+      "required": [
+        "createdDate",
+        "id",
+        "name",
+        "status",
+        "type",
+        "verificationStatus"
+      ],
+      "properties": {
+        "associates": {
+          "type": "array",
+          "description": "Array of associate objects that link to the Customer. For example, this could contain the details of the company directors for a Limited company, or or the partners for a partnership.",
+          "items": {
+            "$ref": "#/definitions/Associate"
+          }
+        },
+        "companyRegNumber": {
+          "type": "string",
+          "description": "The company registration / incorporation number of the company. Only applicable for companies registered with Companies House"
+        },
+        "createdDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Datetime when the customer was created"
+        },
+        "documentInfo": {
+          "type": "array",
+          "description": "Array of document objects that relate to the Customer being created. Examples of Documents could be proof of a Company Director's identity or address, Articles of Association or a Partnership Agreement.",
+          "items": {
+            "$ref": "#/definitions/Document"
+          }
+        },
+        "expectedMonthlySpend": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Indication of the monthly spend of the customer."
+        },
+        "externalReference": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for a Customer. Begins with 'C'"
+        },
+        "industryCode": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "description": "Customer's company name - must be unique across the Modulr platform."
+        },
+        "registeredAddress": {
+          "description": "The address of the company's registered office.",
+          "$ref": "#/definitions/Address"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the Customer. Customers must be 'Active' for Accounts to be created for them. Can be:",
+          "enum": [
+            "ACTIVE",
+            "CLOSED"
+          ]
+        },
+        "tcsVersion": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Version of the Modulr Account Terms and Conditions the Customer has agreed to."
+        },
+        "tradingAddress": {
+          "description": "The address of the company's day-to-day trading activities.",
+          "$ref": "#/definitions/Address"
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of Customer - accepted values are:",
+          "enum": [
+            "LLC",
+            "PLC",
+            "SOLETRADER",
+            "OPARTNRSHP",
+            "LPARTNRSHP",
+            "LLP",
+            "CHARITY",
+            "INDIVIDUAL"
+          ]
+        },
+        "verificationStatus": {
+          "type": "string",
+          "description": "How the identity of the Customer has been verified. Can be:",
+          "enum": [
+            "UNVERIFIED",
+            "VERIFIED",
+            "EXVERIFIED",
+            "REFERRED",
+            "DECLINED",
+            "REVIEWED"
+          ]
+        }
+      }
+    },
+    "PageResponse«Customer»": {
+      "type": "object",
+      "required": [
+        "content",
+        "page",
+        "size",
+        "totalPages",
+        "totalSize"
+      ],
+      "properties": {
+        "content": {
+          "type": "array",
+          "description": "List of responses on the current page",
+          "items": {
+            "$ref": "#/definitions/Customer"
+          }
+        },
+        "page": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Current page number. Its 0 based. i.e firstpage =0, secondpage=1 "
+        },
+        "size": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Page size"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Total pages"
+        },
+        "totalSize": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Total count"
+        }
+      }
+    },
+    "TransactionPageResponse": {
+      "type": "object",
+      "required": [
+        "content",
+        "page",
+        "size",
+        "totalPages",
+        "totalSize"
+      ],
+      "properties": {
+        "content": {
+          "type": "array",
+          "description": "List of responses on the current page",
+          "items": {
+            "$ref": "#/definitions/Transaction"
+          }
+        },
+        "page": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Current page number. Its 0 based. i.e firstpage =0, secondpage=1 "
+        },
+        "pageStartBalance": {
+          "type": "number",
+          "format": "double"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Page size"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Total pages"
+        },
+        "totalSize": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Total count"
+        }
+      }
+    },
+    "MessageResponse": {
+      "type": "object",
+      "properties": {
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {}
+          }
+        },
+        "code": {
+          "type": "string"
+        },
+        "field": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateAssociateRequest": {
+      "type": "object",
+      "required": [
+        "dateOfBirth",
+        "firstName",
+        "homeAddress",
+        "lastName",
+        "type"
+      ],
+      "properties": {
+        "applicant": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indciates if the associate is the applicant. Only one associate should be marked as such"
+        },
+        "dateOfBirth": {
+          "type": "string",
+          "description": "Date in yyyy-MM-dd format. Valid age is from 18 to 100 years"
+        },
+        "documentInfo": {
+          "type": "array",
+          "description": "information on uploaded documents",
+          "items": {
+            "$ref": "#/definitions/Document"
+          }
+        },
+        "email": {
+          "type": "string",
+          "description": "Contact email address for applicants",
+          "minLength": 0,
+          "maxLength": 100,
+          "pattern": "[^\\s@]+@[^\\s@]+\\.[^\\s@]+"
+        },
+        "firstName": {
+          "type": "string",
+          "description": "Letters, hyphens and apostrophes",
+          "minLength": 1,
+          "maxLength": 100,
+          "pattern": "^[\\p{L}' -]+$"
+        },
+        "homeAddress": {
+          "description": "Home address",
+          "$ref": "#/definitions/AddressRequest"
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Letters, hyphens and apostrophes",
+          "minLength": 1,
+          "maxLength": 100,
+          "pattern": "^[\\p{L}' -]+$"
+        },
+        "middleName": {
+          "type": "string",
+          "description": "Letters, hyphens and apostrophes",
+          "pattern": "^[\\p{L}' -]*$"
+        },
+        "ownership": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Ownwership percentage for Partners",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "phone": {
+          "type": "string",
+          "description": "Contact phone number for applicants"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of associate",
+          "enum": [
+            "DIRECTOR",
+            "PARTNER",
+            "CSECRETARY",
+            "SOLETRADER",
+            "BENE_OWNER",
+            "C_INTEREST",
+            "INDIVIDUAL"
+          ]
+        }
+      }
+    },
+    "CreateCustomerRequest": {
+      "type": "object",
+      "required": [
+        "expectedMonthlySpend",
+        "tcsVersion",
+        "type"
+      ],
+      "properties": {
+        "associates": {
+          "type": "array",
+          "description": "List of associates",
+          "items": {
+            "$ref": "#/definitions/CreateAssociateRequest"
+          }
+        },
+        "documentInfo": {
+          "type": "array",
+          "description": "information on uploaded documents",
+          "items": {
+            "$ref": "#/definitions/Document"
+          }
+        },
+        "expectedMonthlySpend": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "externalReference": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 50,
+          "pattern": "[\\w-\\s]*"
+        },
+        "industryCode": {
+          "type": "string",
+          "description": "Mandatory for all types except for 'INDIVIDUAL'",
+          "minLength": 0,
+          "maxLength": 5
+        },
+        "registeredAddress": {
+          "description": "Registered address ",
+          "$ref": "#/definitions/AddressRequest"
+        },
+        "tcsVersion": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "tradingAddress": {
+          "description": "Trading address. Mandatory for all types except for 'INDIVIDUAL'",
+          "$ref": "#/definitions/AddressRequest"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "LLC",
+            "PLC",
+            "SOLETRADER",
+            "OPARTNRSHP",
+            "LPARTNRSHP",
+            "LLP",
+            "CHARITY",
+            "INDIVIDUAL"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "description": "AlphaNumeric characters plus [ _ ' @ , & £ $ € ¥ = # % ‘ ’ : ; \\ / < > « »  ! ‘ “ ” . ? - *{ }  + % ( )]. Mandatory for all types except 'INDIVIDUAL'",
+          "minLength": 0,
+          "maxLength": 100,
+          "pattern": "^([_'@,&()£$€¥=#%‘’:;/<>«»\"!‘“”.\\?\\-\\s\\*\\{\\}\\[\\]\\+\\%\\\\]*?[A-Za-z0-9])+[_'@,&()£$€¥=#%‘’:;/<>«»\"!‘“”.\\?\\-\\s\\*\\{\\}\\[\\]\\+\\%\\\\]*"
+        },
+        "companyRegNumber": {
+          "type": "string",
+          "description": "8 digits or 2 alphabets followed by 6 digits, must be specified if the type is limited company ",
+          "minLength": 0,
+          "maxLength": 8,
+          "pattern": "^([A-Za-z]{2}|[0-9]{2})[0-9]{6}$"
+        }
+      }
+    },
+    "Document": {
+      "type": "object",
+      "properties": {
+        "fileName": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "uploadedDate": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateAccountRequest": {
+      "type": "object",
+      "required": [
+        "currency"
+      ],
+      "properties": {
+        "currency": {
+          "type": "string",
+          "enum": [
+            "GBP"
+          ]
+        },
+        "externalReference": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 50,
+          "pattern": "[\\w-\\s]*"
+        },
+        "productCode": {
+          "type": "string",
+          "description": "Product associated with the account. Contact your account manager for correct code to use."
+        }
+      }
+    },
+    "Transaction": {
+      "type": "object",
+      "required": [
+        "amount",
+        "credit",
+        "currency",
+        "id",
+        "postedDate",
+        "sourceId",
+        "transactionDate",
+        "type"
+      ],
+      "properties": {
+        "additionalInfo": {
+          "type": "object",
+          "description": "any extra information available on transaction.",
+          "properties": {}
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "description": "Amount of the transaction in Major Currency Units"
+        },
+        "credit": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates if the transaction was a Credit or a Debit"
+        },
+        "currency": {
+          "type": "string",
+          "description": "Currency of the account in ISO 4217 format"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the transaction. Contains Payer/ Payee details and reference"
+        },
+        "id": {
+          "type": "string",
+          "description": "Unique id for the Transaction"
+        },
+        "postedDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Datetime when the transaction was posted to the Modulr system. "
+        },
+        "sourceExternalReference": {
+          "type": "string"
+        },
+        "sourceId": {
+          "type": "string"
+        },
+        "transactionDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Datetime when the transaction took place"
+        },
+        "type": {
+          "type": "string",
+          "description": "Enumerated type indicating the type of the transaction. Values:",
+          "enum": [
+            "PI_BACS",
+            "PI_FAST",
+            "PI_DD",
+            "PO_FAST",
+            "PO_REV",
+            "INT_INTERC"
+          ]
+        }
+      }
+    },
+    "IdentifierRequest": {
+      "type": "object",
+      "properties": {
+        "accountNumber": {
+          "type": "string",
+          "pattern": "^\\d{8}$"
+        },
+        "ibanNumber": {
+          "type": "string"
+        },
+        "sortCode": {
+          "type": "string",
+          "pattern": "^\\d{6}"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "SCAN",
+            "IBAN"
+          ]
+        }
+      }
+    },
+    "PageResponse«Beneficiary»": {
+      "type": "object",
+      "required": [
+        "content",
+        "page",
+        "size",
+        "totalPages",
+        "totalSize"
+      ],
+      "properties": {
+        "content": {
+          "type": "array",
+          "description": "List of responses on the current page",
+          "items": {
+            "$ref": "#/definitions/Beneficiary"
+          }
+        },
+        "page": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Current page number. Its 0 based. i.e firstpage =0, secondpage=1 "
+        },
+        "size": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Page size"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Total pages"
+        },
+        "totalSize": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Total count"
+        }
+      }
+    },
+    "AddressRequest": {
+      "type": "object",
+      "properties": {
+        "addressLine1": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 50,
+          "pattern": "^([^A-Za-z0-9]*?[A-Za-z0-9]){1,}[\\.\\-\\s\\'\\/,()\\[\\]]*"
+        },
+        "addressLine2": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 50,
+          "pattern": "^$|^([^A-Za-z0-9]*?[A-Za-z0-9]){1,}[\\.\\-\\s\\'\\/,()\\[\\]]*"
+        },
+        "country": {
+          "type": "string",
+          "enum": [
+            "AT",
+            "BE",
+            "BG",
+            "CY",
+            "CZ",
+            "DK",
+            "EE",
+            "FI",
+            "FR",
+            "DE",
+            "GR",
+            "HU",
+            "IS",
+            "IE",
+            "IT",
+            "LV",
+            "LI",
+            "LT",
+            "LU",
+            "MT",
+            "NL",
+            "NO",
+            "PL",
+            "PT",
+            "RO",
+            "SK",
+            "SI",
+            "ES",
+            "SE",
+            "GB"
+          ]
+        },
+        "postCode": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 8
+        },
+        "postTown": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 50,
+          "pattern": "^([^A-Za-z0-9]*?[A-Za-z0-9]){1,}[.'\\-&\\s]*"
+        }
+      }
+    },
+    "UpdateCustomerRequest": {
+      "type": "object",
+      "properties": {
+        "externalReference": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 50,
+          "pattern": "[\\w-\\s]*"
+        }
+      }
+    },
+    "PageResponse«Account»": {
+      "type": "object",
+      "required": [
+        "content",
+        "page",
+        "size",
+        "totalPages",
+        "totalSize"
+      ],
+      "properties": {
+        "content": {
+          "type": "array",
+          "description": "List of responses on the current page",
+          "items": {
+            "$ref": "#/definitions/Account"
+          }
+        },
+        "page": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Current page number. Its 0 based. i.e firstpage =0, secondpage=1 "
+        },
+        "size": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Page size"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Total pages"
+        },
+        "totalSize": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Total count"
+        }
+      }
+    },
+    "Account Identifier": {
+      "type": "object",
+      "properties": {
+        "accountNumber": {
+          "type": "string",
+          "description": "Bank account Sort Code"
+        },
+        "ibanNumber": {
+          "type": "string"
+        },
+        "providerId": {
+          "type": "string"
+        },
+        "sortCode": {
+          "type": "string",
+          "description": "Bank account Sort Code"
+        }
+      }
+    },
+    "Associate": {
+      "type": "object",
+      "required": [
+        "dateOfBirth",
+        "firstName",
+        "id",
+        "lastName",
+        "type",
+        "verificationStatus"
+      ],
+      "properties": {
+        "applicant": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates which Associate originally applied for the Modulr account"
+        },
+        "dateOfBirth": {
+          "type": "string",
+          "description": "Associate's date of birth in format yyyy-MM-dd"
+        },
+        "documentInfo": {
+          "type": "array",
+          "description": "Documents gathered during Customer Due Dilligence checks on an Associate.",
+          "items": {
+            "$ref": "#/definitions/Document"
+          }
+        },
+        "email": {
+          "type": "string",
+          "description": "Associate's email address"
+        },
+        "firstName": {
+          "type": "string",
+          "description": "Associate's first name(s)"
+        },
+        "homeAddress": {
+          "description": "Home address of the Associate",
+          "$ref": "#/definitions/Address"
+        },
+        "id": {
+          "type": "string",
+          "description": "Unique id for the Associate"
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Associate's surname"
+        },
+        "middleName": {
+          "type": "string",
+          "description": "Associate's middle name"
+        },
+        "ownership": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The Associates's percentage ownership of the Customer"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Associate's phone number"
+        },
+        "type": {
+          "type": "string",
+          "description": "Describes the relation between the Associate and the Customer. Can be one of ",
+          "enum": [
+            "DIRECTOR",
+            "PARTNER",
+            "CSECRETARY",
+            "SOLETRADER",
+            "BENE_OWNER",
+            "C_INTEREST",
+            "INDIVIDUAL"
+          ]
+        },
+        "verificationStatus": {
+          "type": "string",
+          "description": "How the Associate was verified. Can be one of ",
+          "enum": [
+            "UNVERIFIED",
+            "VERIFIED",
+            "EXVERIFIED",
+            "REFERRED",
+            "DECLINED",
+            "REVIEWED"
+          ]
+        }
+      }
+    },
+    "Beneficiary": {
+      "type": "object",
+      "required": [
+        "created",
+        "customerId",
+        "defaultReference",
+        "destinationIdentifier",
+        "id",
+        "name",
+        "status"
+      ],
+      "properties": {
+        "accountId": {
+          "type": "string",
+          "description": "Id of the account if this beneficiary is a Modulr account, null otherwise"
+        },
+        "approvalRequired": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates if the beneficiary creation is pending approval"
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Datetime the Beneficiary was created"
+        },
+        "customerId": {
+          "type": "string",
+          "description": "Id of the customer than owns this beneficiary"
+        },
+        "defaultReference": {
+          "type": "string",
+          "description": "Default reference used for payments to the Beneficiary."
+        },
+        "destinationIdentifier": {
+          "$ref": "#/definitions/Account Identifier"
+        },
+        "externalReference": {
+          "type": "string",
+          "description": "External system reference for the Beneficiary"
+        },
+        "id": {
+          "type": "string",
+          "description": "Unique reference for the Beneficiary. Begins with 'B'"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name for the Beneficiary"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the Beneficiary. Can be:",
+          "enum": [
+            "ACTIVE",
+            "DELETED",
+            "PENDING",
+            "BLOCKED"
+          ]
+        }
+      }
+    },
+    "PaymentOutRequest": {
+      "type": "object",
+      "required": [
+        "amount",
+        "sourceAccountId"
+      ],
+      "properties": {
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "description": "Amount of the payment in Major Current Units - '1' = 1.00 GBP",
+          "minimum": 5e-324,
+          "maximum": 2147483647
+        },
+        "destination": {
+          "description": "Destination of the Payment",
+          "$ref": "#/definitions/Destination"
+        },
+        "externalReference": {
+          "type": "string",
+          "description": "Your reference for this payment",
+          "minLength": 0,
+          "maxLength": 50,
+          "pattern": "[\\w-\\s]*"
+        },
+        "reference": {
+          "type": "string",
+          "description": "Reference to be used for the Payment. This will appear on the Account statement/the recipient's bank account. Min 6 to max 18 characters. Can contain alphanumeric, '-', '.', '&', '/' and space."
+        },
+        "sourceAccountId": {
+          "type": "string",
+          "description": "Identifier for the sending Account."
+        }
+      }
+    },
+    "Destination": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "accountNumber": {
+          "type": "string",
+          "description": "Account Number of destination account if using SCAN type.",
+          "pattern": "^[0-9]{8}$"
+        },
+        "id": {
+          "type": "string",
+          "description": "Identifier for the Payment destination if using ACCOUNT or BENEFICIARY type. Can be either: a) Beneficiary id for an external Payment, b) Account id for a transfer to another Account"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name for new destination beneficiary if one is created.",
+          "minLength": 0,
+          "maxLength": 100,
+          "pattern": "^([^A-Za-z0-9]*?[A-Za-z0-9]){1,}['\\.\\-\\/&\\s]*"
+        },
+        "sortCode": {
+          "type": "string",
+          "description": "Sort Code of destination account if using SCAN type.",
+          "pattern": "^[0-9]{6}$"
+        },
+        "type": {
+          "type": "string",
+          "description": "Indicates the type of destination. Can be one of ",
+          "enum": [
+            "BENEFICIARY",
+            "ACCOUNT",
+            "SCAN"
+          ]
+        }
+      }
+    },
+    "BatchPaymentResponse": {
+      "type": "object",
+      "required": [
+        "id",
+        "paymentResponses",
+        "status"
+      ],
+      "properties": {
+        "batchReference": {
+          "type": "string"
+        },
+        "externalReference": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "paymentResponses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PaymentResponse"
+          }
+        },
+        "status": {
+          "type": "string",
+          "description": "Current status of batch. Can be one of ",
+          "enum": [
+            "ACCEPTED",
+            "REJECTED",
+            "SUBMITTED"
+          ]
+        },
+        "summary": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    },
+    "PageResponse«PaymentResponse»": {
+      "type": "object",
+      "required": [
+        "content",
+        "page",
+        "size",
+        "totalPages",
+        "totalSize"
+      ],
+      "properties": {
+        "content": {
+          "type": "array",
+          "description": "List of responses on the current page",
+          "items": {
+            "$ref": "#/definitions/PaymentResponse"
+          }
+        },
+        "page": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Current page number. Its 0 based. i.e firstpage =0, secondpage=1 "
+        },
+        "size": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Page size"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Total pages"
+        },
+        "totalSize": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Total count"
+        }
+      }
+    },
+    "PaymentResponse": {
+      "type": "object",
+      "required": [
+        "details",
+        "externalReference",
+        "id",
+        "status"
+      ],
+      "properties": {
+        "approvalStatus": {
+          "type": "string",
+          "description": "Current approval status of payment. Can be one of ",
+          "enum": [
+            "NOTNEEDED",
+            "PENDING",
+            "APPROVED",
+            "REJECTED"
+          ]
+        },
+        "createdDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "externalReference": {
+          "type": "string",
+          "description": "external reference if provided"
+        },
+        "message": {
+          "type": "string",
+          "description": "Information about payment (if available)"
+        },
+        "status": {
+          "type": "string",
+          "description": "Current status of payment. Can be one of ",
+          "enum": [
+            "SUBMITTED",
+            "VALIDATED",
+            "EXT_PROC",
+            "PROCESSED",
+            "RECONCILED",
+            "ER_INVALID",
+            "ER_EXTCONN",
+            "ER_EXTSYS",
+            "ER_EXPIRED",
+            "ER_GENERAL",
+            "ER_BATCH",
+            "EXT_SENT",
+            "UNALLOCATED",
+            "HELD",
+            "RETURNED"
+          ]
+        },
+        "details": {
+          "type": "object",
+          "description": "All the details of the payment from the original request",
+          "properties": {}
+        },
+        "id": {
+          "type": "string",
+          "description": "Unique id for the Payment request"
+        }
+      }
+    },
+    "BatchPaymentOutRequest": {
+      "type": "object",
+      "required": [
+        "payments"
+      ],
+      "properties": {
+        "externalReference": {
+          "type": "string",
+          "description": "Your reference for this Batch of payments",
+          "minLength": 0,
+          "maxLength": 50,
+          "pattern": "[\\w-\\s]*"
+        },
+        "payments": {
+          "type": "array",
+          "description": "Lists of payments. Need atleast 1 and maximum of 1000",
+          "items": {
+            "$ref": "#/definitions/PaymentOutRequest"
+          }
+        },
+        "strictProcessing": {
+          "type": "boolean",
+          "example": false,
+          "description": "Flag to control if the entire batch fails for any individual payment validation failure"
+        }
+      }
+    },
+    "RuleResponse": {
+      "type": "object",
+      "required": [
+        "accountId",
+        "data",
+        "id",
+        "name",
+        "type"
+      ],
+      "properties": {
+        "accountId": {
+          "type": "string",
+          "description": "The Account which the Rule is created on."
+        },
+        "customerId": {
+          "type": "string",
+          "description": "The Customer which the Rule is created on."
+        },
+        "data": {
+          "type": "object",
+          "description": "Complex object that describes the Rule. For Split Type, this is an array of splits, with each split having percent & destinationId. Sweep Type, this needs frequency & destinationId.",
+          "properties": {}
+        },
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for a Rule"
+        },
+        "name": {
+          "type": "string",
+          "description": "Rule's name",
+          "minLength": 0,
+          "maxLength": 25
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of Rule.Can be one of ",
+          "enum": [
+            "SPLIT",
+            "SWEEP"
+          ]
+        }
+      }
+    },
+    "CreateRuleRequest": {
+      "type": "object",
+      "required": [
+        "accountId",
+        "data",
+        "name",
+        "type"
+      ],
+      "properties": {
+        "accountId": {
+          "type": "string",
+          "description": "The Account which the Rule is created on."
+        },
+        "customerId": {
+          "type": "string",
+          "description": "The Customer which the Rule is created on."
+        },
+        "data": {
+          "type": "object",
+          "description": "Complex object that describes the Rule. For Split Type, this is an array of splits, with each split having percent & destinationId. Sweep Type, this needs frequency & destinationId.",
+          "properties": {}
+        },
+        "name": {
+          "type": "string",
+          "description": "Rule's name",
+          "minLength": 0,
+          "maxLength": 25
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of Rule.Can be one of ",
+          "enum": [
+            "SPLIT",
+            "SWEEP"
+          ]
+        }
+      }
+    },
+    "PageResponse«RuleResponse»": {
+      "type": "object",
+      "required": [
+        "content",
+        "page",
+        "size",
+        "totalPages",
+        "totalSize"
+      ],
+      "properties": {
+        "content": {
+          "type": "array",
+          "description": "List of responses on the current page",
+          "items": {
+            "$ref": "#/definitions/RuleResponse"
+          }
+        },
+        "page": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Current page number. Its 0 based. i.e firstpage =0, secondpage=1 "
+        },
+        "size": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Page size"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Total pages"
+        },
+        "totalSize": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Total count"
+        }
+      }
+    },
+    "UpdateNotificationRequest": {
+      "type": "object",
+      "required": [
+        "config",
+        "destinations",
+        "status"
+      ],
+      "properties": {
+        "config": {
+          "description": "Configuration information for this Notification entity.",
+          "$ref": "#/definitions/NotificationConfig"
+        },
+        "destinations": {
+          "type": "array",
+          "description": "The list of emails or webhooks used for sending the notification.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the notification.  Can be one of ",
+          "enum": [
+            "ACTIVE",
+            "INACTIVE"
+          ]
+        }
+      }
+    },
+    "NotificationResponse": {
+      "type": "object",
+      "required": [
+        "channel",
+        "config",
+        "customerId",
+        "destinations",
+        "id",
+        "status",
+        "type"
+      ],
+      "properties": {
+        "channel": {
+          "type": "string",
+          "description": "Channel used to send the notification.",
+          "enum": [
+            "EMAIL",
+            "WEBHOOK"
+          ]
+        },
+        "config": {
+          "description": "Configuration information for this Notification entity.",
+          "$ref": "#/definitions/NotificationConfig"
+        },
+        "customerId": {
+          "type": "string",
+          "description": "Unique Identifier for the customer of this notification."
+        },
+        "destinations": {
+          "type": "array",
+          "description": "A list of emails or webhooks used to send the notification.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "id": {
+          "type": "string",
+          "description": "Unique Identifier for the notification."
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of notification.",
+          "enum": [
+            "ACTIVE",
+            "INACTIVE"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of notification. Can be one of ",
+          "enum": [
+            "PAYIN",
+            "PAYOUT",
+            "BALANCE_LOW",
+            "BALANCE_HIGH",
+            "BALANCE"
+          ]
+        }
+      }
+    },
+    "NotificationConfig": {
+      "type": "object",
+      "properties": {
+        "daysToRun": {
+          "type": "array",
+          "description": "Days of the week when to trigger the notification. This attribute applies only to 'EMAIL' notifications channel, of type 'BALANCE'.",
+          "items": {
+            "type": "string",
+            "enum": [
+              "MONDAY",
+              "TUESDAY",
+              "WEDNESDAY",
+              "THURSDAY",
+              "FRIDAY",
+              "SATURDAY",
+              "SUNDAY"
+            ]
+          }
+        },
+        "retry": {
+          "type": "boolean",
+          "example": false,
+          "description": "Flag indicating whether failed webhooks should be retried. This attribute applies only to 'WEBHOOK' notifications channel."
+        },
+        "secret": {
+          "type": "string",
+          "description": "Mandatory for webhook. Secret that is used in HMAC calculation, for webhooks. This attribute applies only to 'WEBHOOK' notifications channel.",
+          "minLength": 32,
+          "maxLength": 32
+        },
+        "threshold": {
+          "type": "number",
+          "format": "double",
+          "description": "Amount threshold which triggers the notification. This attribute only applies to 'EMAIL' notifications channel, of type 'PAYIN', 'PAYOUT'."
+        },
+        "timesToRun": {
+          "type": "array",
+          "description": "Times of the day when to trigger the notification. This attribute applies only to 'EMAIL' notifications channel, of type 'BALANCE'.",
+          "items": {
+            "type": "string",
+            "enum": [
+              "AM",
+              "PM"
+            ]
+          }
+        }
+      }
+    },
+    "WebHookFailureResponse": {
+      "type": "object",
+      "required": [
+        "customerBid",
+        "eventName",
+        "lastFailedTime",
+        "retry",
+        "url"
+      ],
+      "properties": {
+        "customerBid": {
+          "type": "string",
+          "description": "Unique Identifier for the customer of this webhook."
+        },
+        "data": {
+          "type": "object",
+          "properties": {}
+        },
+        "eventName": {
+          "type": "string",
+          "description": "Event which would trigger the webhook. Can be one of ",
+          "enum": [
+            "PAYIN",
+            "PAYOUT"
+          ]
+        },
+        "lastFailedTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last failure time."
+        },
+        "retry": {
+          "type": "boolean",
+          "example": false,
+          "description": "Turn webhook retry mechanism on/off"
+        },
+        "url": {
+          "type": "string",
+          "description": "Endpoint URL for receiving webhook data"
+        }
+      }
+    },
+    "NotificationRequest": {
+      "type": "object",
+      "required": [
+        "channel",
+        "config",
+        "destinations",
+        "type"
+      ],
+      "properties": {
+        "channel": {
+          "type": "string",
+          "description": "Channel used for sending the notification.  Can be one of ",
+          "enum": [
+            "EMAIL",
+            "WEBHOOK"
+          ]
+        },
+        "config": {
+          "description": "Configuration information for this Notification entity.",
+          "$ref": "#/definitions/NotificationConfig"
+        },
+        "destinations": {
+          "type": "array",
+          "description": "The list of emails or url(webhook) used for sending the notification. For 'EMAIL' channel this can be a list of comma separated email addresses. For 'WEBHOOK' channel this should be a single URL.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of the notification. Can be one of ",
+          "enum": [
+            "PAYIN",
+            "PAYOUT",
+            "BALANCE_LOW",
+            "BALANCE_HIGH",
+            "BALANCE"
+          ]
+        }
+      }
+    },
+    "InboundPaymentRequest": {
+      "type": "object",
+      "required": [
+        "accountId",
+        "amount",
+        "description",
+        "type"
+      ],
+      "properties": {
+        "accountId": {
+          "type": "string",
+          "description": "The account to be credited"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "description": "Amount of the payment in major current Units - '1' = 1.00 GBP",
+          "minimum": 0.01,
+          "maximum": 2147483647
+        },
+        "numberOfTransactions": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of credit transactions to create, defaults to 1",
+          "minimum": 1,
+          "maximum": 50
+        },
+        "payerDetail": {
+          "description": "Payer details. Mandatory",
+          "$ref": "#/definitions/PartyDetail"
+        },
+        "transactionDate": {
+          "type": "string",
+          "description": "Date of credit in yyyy-MM-ddTHH:mm:ssZ format"
+        },
+        "type": {
+          "type": "string",
+          "description": " Type of credit, values: ",
+          "enum": [
+            "PI_BACS",
+            "PI_FP",
+            "PI_DD",
+            "PO_REV",
+            "PI_FAST",
+            "INT_INTERC"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the credit",
+          "maxLength": 255
+        }
+      }
+    },
+    "AccountIdentifierDetail": {
+      "type": "object",
+      "properties": {
+        "accountNumber": {
+          "type": "string",
+          "description": "AccountNo (8 digits) of payer. Required if type is SCAN"
+        },
+        "ibanNumber": {
+          "type": "string"
+        },
+        "sortCode": {
+          "type": "string",
+          "description": "SortCode(6 digits) of payer. Required if type is SCAN"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "SCAN",
+            "IBAN"
+          ]
+        }
+      }
+    },
+    "ModelAndView": {
+      "type": "object",
+      "properties": {
+        "empty": {
+          "type": "boolean"
+        },
+        "model": {
+          "type": "object",
+          "properties": {}
+        },
+        "modelMap": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {}
+          }
+        },
+        "reference": {
+          "type": "boolean"
+        },
+        "view": {
+          "$ref": "#/definitions/View"
+        },
+        "viewName": {
+          "type": "string"
+        }
+      }
+    },
+    "PartyDetail": {
+      "type": "object",
+      "properties": {
+        "identifier": {
+          "$ref": "#/definitions/AccountIdentifierDetail"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "View": {
+      "type": "object",
+      "properties": {
+        "contentType": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
