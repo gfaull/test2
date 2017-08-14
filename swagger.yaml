@@ -1,8 +1,8 @@
 swagger: '2.0'
 info:
-  description: Modulo API
   version: '1'
   title: Modulr API
+  description: This is a wonderful API
   contact:
     name: it.support@modulrfinance.com
   license:
